@@ -6,7 +6,7 @@
 
 | 变量 | jixiao2 默认值 | 说明 |
 |------|----------------|------|
-| `baseUrl` | `http://127.0.0.1:8081`（本地）或部署域名 | API 根地址 |
+| `baseUrl` | `http://172.25.1.43:8081` | API 根地址 |
 | `sessionCookie` | `jx_session` | 登录 Cookie 名 |
 | `authHeader` | — | 若用 Bearer Token，在此说明 |
 
@@ -33,9 +33,9 @@ Cookie: {sessionCookie}=...
 | 员工姓名 | `employeeName` |
 | 考核周期 | `period` |
 | 流程状态 | `status` |
-| 自我总结 | `personalSummary` |
-| 自评分项 | `selfReview[]` → `{ indicatorName, score, comment }` |
-| 指标定义 | `indicators[]` → `{ name, description, criteria, weight }` |
+| 自我总结（**唯一审核字段**） | `personalSummary` |
+
+以下字段可忽略，**不得**用于审核判定：`selfReview`、`indicators`、`cultureSelfReview` 等。
 
 ## API 端点（jixiao2）
 
