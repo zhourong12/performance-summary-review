@@ -10,22 +10,23 @@
 | `frontendUrl` | `http://172.25.1.43:8081` | 登录页；与 API 同域时与 baseUrl 相同 |
 | `sessionCookie` | `jx_session` | 登录 Cookie 名 |
 | `cookieJar` | `.auth/cookies.txt` | 本地 cookie jar（勿提交 Git） |
-| `authHeader` | — | 若用 Bearer Token，在此说明 |
+| `tokenFile` | `.auth/token.txt` | 本地 API Token（勿提交 Git） |
+| `authHeader` | `Authorization: Bearer {token}` | Agent/Skill 推荐认证方式 |
 
 ## 登录与会话
 
-账密可能关闭。**优先飞书登录**，流程见 [auth.md](auth.md)：
+账密可能关闭。**优先使用 API Token**，流程见 [auth.md](auth.md)：
 
-1. `GET /api/session/me` 检查是否已登录
-2. 未登录 → 打开 `{frontendUrl}/login`，用户飞书授权
-3. 将 `jx_session` 保存到 `.auth/cookies.txt`
-4. 后续 API 使用 `curl -b .auth/cookies.txt`
+1. 用户用飞书登录系统，在「API Token」页面（`/admin/api-tokens`）创建 Token
+2. 将 Token 保存到 `.auth/token.txt`
+3. 后续 API 使用 `Authorization: Bearer {token}`
+4. Cookie/飞书登录仅作为备用方式
 
-可执行 `scripts/open-feishu-login.ps1` 唤起浏览器。
+可执行 `scripts/open-feishu-login.ps1` 唤起浏览器生成 Token。
 
 ```http
 GET {baseUrl}/api/session/me
-Cookie: {sessionCookie}=...
+Authorization: Bearer {token}
 ```
 
 | 字段 | 用途 |
@@ -35,6 +36,12 @@ Cookie: {sessionCookie}=...
 | `menus.performance_list_all` | 有则可查看任意绩效详情（批量审核） |
 
 403 / 未登录 → 停止写操作，提示用户登录或换账号。
+
+所有业务请求都应带：
+
+```http
+Authorization: Bearer {token}
+```
 
 ## 数据字段映射
 
@@ -54,12 +61,14 @@ Cookie: {sessionCookie}=...
 
 ```http
 GET {baseUrl}/api/performances/{id}
+Authorization: Bearer {token}
 ```
 
 ### 列表（批量）
 
 ```http
 GET {baseUrl}/api/performances?page=1&pageSize=50&status=manager_review&period={period}&departmentId={deptId}
+Authorization: Bearer {token}
 ```
 
 常用 `status`：`self_review`、`manager_review`、`dual_manager_review`、`dotted_manager_review`（逗号分隔可多选）
@@ -68,6 +77,7 @@ GET {baseUrl}/api/performances?page=1&pageSize=50&status=manager_review&period={
 
 ```http
 POST {baseUrl}/api/performances/ops/reject-self-review
+Authorization: Bearer {token}
 Content-Type: application/json
 
 { "recordId": "{id}", "reason": "驳回原因" }

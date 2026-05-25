@@ -21,8 +21,8 @@ description: >-
 ## 启动前
 
 1. 读 [integration.md](integration.md)
-2. **会话**：按 [auth.md](auth.md) 获取/复用 `jx_session`（优先飞书登录，账密仅备用）
-3. 调 API 前 `GET /api/session/me`；驳回须 `super_admin`
+2. **会话**：按 [auth.md](auth.md) 优先读取 `.auth/token.txt`，所有业务 API 使用 `Authorization: Bearer <token>`
+3. 调 API 前 `GET /api/session/me` 验证 `authenticated=true`；驳回须 `role=super_admin`
 
 ## 审核范围
 
@@ -44,7 +44,7 @@ description: >-
 
 ```
 1. 读 integration.md（若调 API）
-2. 确保会话（auth.md：无 cookie 则唤起飞书登录 → 保存 .auth/cookies.txt）
+2. 确保会话（auth.md：优先读取 .auth/token.txt；无 Token/失效则提示用户在 API Token 页创建）
 3. 权限检查 GET /api/session/me
 4. 仅取 personalSummary
 5. 按 criteria.md 做充实度 / 套话检查
@@ -64,10 +64,13 @@ description: >-
 
 ## 驳回
 
-前提：员工已提交（`manager_review` 等，见 integration）、操作者为驳回角色、`reason` 具体、**用户已确认**。
+前提：员工已提交（`manager_review` 等，见 integration）、Bearer Token 对应账号为 `super_admin`、`reason` 具体、**用户已确认**。
 
 ```http
 POST {baseUrl}/api/performances/ops/reject-self-review
+Authorization: Bearer {token}
+Content-Type: application/json
+
 { "recordId": "{id}", "reason": "..." }
 ```
 
@@ -116,5 +119,6 @@ POST {baseUrl}/api/performances/ops/reject-self-review
 ## 注意事项
 
 - 不评判分数；不审指标分项 comment
+- 调 API 优先使用 API Token；Cookie/飞书登录仅用于创建 Token 或备用排查
 - 驳回须用户确认后再调 API
 - 中文输出

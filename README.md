@@ -40,9 +40,9 @@ cp -r performance-summary-review ~/.cursor/skills/
 | `SKILL.md` | 主指令（通用审核流程，可迁移） |
 | `criteria.md` | 审核标准与示例 |
 | `integration.md` | **对接配置**（API、字段、权限；按目标系统修改） |
-| `auth.md` | **飞书登录与 Cookie 保存**（账密关闭时使用） |
+| `auth.md` | **API Token / Cookie 会话说明** |
 | `scripts/open-feishu-login.ps1` | Windows 打开登录页 |
-| `.auth/cookies.txt` | 本地会话（gitignore，勿提交） |
+| `.auth/token.txt` / `.auth/cookies.txt` | 本地凭证（gitignore，勿提交） |
 | `README.md` | 本说明 |
 
 ## 接入新系统
@@ -55,6 +55,7 @@ cp -r performance-summary-review ~/.cursor/skills/
 
 本目录内 `integration.md` 已配置 jixiao2 后端：
 
+- 登录：优先使用「API Token」页面生成的 Token，保存到 `.auth/token.txt`
 - 读：`GET /api/performances/{id}`
 - 驳：`POST /api/performances/ops/reject-self-review`（`super_admin`）
 
