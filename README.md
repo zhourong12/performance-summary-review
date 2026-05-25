@@ -40,6 +40,9 @@ cp -r performance-summary-review ~/.cursor/skills/
 | `SKILL.md` | 主指令（通用审核流程，可迁移） |
 | `criteria.md` | 审核标准与示例 |
 | `integration.md` | **对接配置**（API、字段、权限；按目标系统修改） |
+| `auth.md` | **飞书登录与 Cookie 保存**（账密关闭时使用） |
+| `scripts/open-feishu-login.ps1` | Windows 打开登录页 |
+| `.auth/cookies.txt` | 本地会话（gitignore，勿提交） |
 | `README.md` | 本说明 |
 
 ## 接入新系统

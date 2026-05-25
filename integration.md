@@ -7,10 +7,21 @@
 | 变量 | jixiao2 默认值 | 说明 |
 |------|----------------|------|
 | `baseUrl` | `http://172.25.1.43:8081` | API 根地址 |
+| `frontendUrl` | `http://172.25.1.43:8081` | 登录页；与 API 同域时与 baseUrl 相同 |
 | `sessionCookie` | `jx_session` | 登录 Cookie 名 |
+| `cookieJar` | `.auth/cookies.txt` | 本地 cookie jar（勿提交 Git） |
 | `authHeader` | — | 若用 Bearer Token，在此说明 |
 
-## 权限检查
+## 登录与会话
+
+账密可能关闭。**优先飞书登录**，流程见 [auth.md](auth.md)：
+
+1. `GET /api/session/me` 检查是否已登录
+2. 未登录 → 打开 `{frontendUrl}/login`，用户飞书授权
+3. 将 `jx_session` 保存到 `.auth/cookies.txt`
+4. 后续 API 使用 `curl -b .auth/cookies.txt`
+
+可执行 `scripts/open-feishu-login.ps1` 唤起浏览器。
 
 ```http
 GET {baseUrl}/api/session/me

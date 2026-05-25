@@ -21,7 +21,8 @@ description: >-
 ## 启动前
 
 1. 读 [integration.md](integration.md)
-2. 调 API 前做权限检查（jixiao2：`GET /api/session/me`，驳回须 `super_admin`）
+2. **会话**：按 [auth.md](auth.md) 获取/复用 `jx_session`（优先飞书登录，账密仅备用）
+3. 调 API 前 `GET /api/session/me`；驳回须 `super_admin`
 
 ## 审核范围
 
@@ -43,11 +44,12 @@ description: >-
 
 ```
 1. 读 integration.md（若调 API）
-2. 权限检查（若调 API）
-3. 仅取 personalSummary
-4. 按 criteria.md 做充实度 / 套话检查
-5. 输出报告；不通过则附驳回原因草稿
-6. 用户确认后调用驳回 API
+2. 确保会话（auth.md：无 cookie 则唤起飞书登录 → 保存 .auth/cookies.txt）
+3. 权限检查 GET /api/session/me
+4. 仅取 personalSummary
+5. 按 criteria.md 做充实度 / 套话检查
+6. 输出报告；不通过则附驳回原因草稿
+7. 用户确认后调用驳回 API
 ```
 
 标准详见 [criteria.md](criteria.md)。
